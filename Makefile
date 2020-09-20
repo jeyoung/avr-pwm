@@ -8,6 +8,8 @@ OBJCOPY = avr-objcopy
 
 AVRDUDE = $(AVRDUDE_PATH)
 PORT = usb
+PROGRAMMER = avrispmkII
+PART = t85
 
 CFLAGS = -Os -DF_CPU=1000000UL $(INCLUDE_DIRS) -std=c11 -mmcu=attiny85
 LDFLAGS = -L/usr/lib/avr/lib -mmcu=attiny85
@@ -27,7 +29,7 @@ $(TARGET).elf: $(OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 upload: $(TARGET).hex
-	$(AVRDUDE) -v -F -V -c avrispmkII -p t85 -P $(PORT) -b 115200 -U flash:w:$<:i -U lfuse:w:0x62:m -U hfuse:w:0xDF:m -Uefuse:w:0xFF:m
+	$(AVRDUDE) -v -c $(PROGRAMMER) -p $(PART) -P $(PORT) -U flash:w:$<:i -U lfuse:w:0x62:m -U hfuse:w:0xDF:m -Uefuse:w:0xFF:m
 
 clean:
 	-rm -f $(TARGET).hex $(TARGET).elf $(OBJECTS)
