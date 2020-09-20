@@ -1,7 +1,9 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-/* 2 ms -> 250 cycles */
+/* 2 ms -> 250 cycles
+ * 8E-6 * 250 -> 2 ms, that is a 100% duty cycle equals 2 ms
+ */
 #define MAX_DUTY_CYCLE 250
 
 #define MIN_PULSE 32
@@ -17,7 +19,9 @@ main(void)
 	DDRB  |= (1 << PB4);
 	TCCR1 |= (1 << CTC1);
 
-	/* CK/8 -> 0.002 second period */
+	/* Divide the clock by 8, so 1 MHz/8 = 125 KHz equals 8E-6 second per
+	 * cycle.
+	 */
 	TCCR1 |= (1 << CS12);
 	GTCCR |= (1 << PWM1B) | (1 << COM1B1) & ~(1 << COM1B0);
 
