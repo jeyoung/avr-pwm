@@ -17,7 +17,6 @@ void
 main(void)
 {
 	DDRB  |= (1 << PB4);
-	TCCR1 |= (1 << CTC1);
 
 	/* Divide the clock by 8, so 1 MHz/8 = 125 KHz equals 8E-6 second per
 	 * cycle.
@@ -25,6 +24,7 @@ main(void)
 	TCCR1 |= (1 << CS12);
 	GTCCR |= (1 << PWM1B) | (1 << COM1B1) & ~(1 << COM1B0);
 
+	// 250 * 8E-6 = 2 ms period
 	OCR1C  = MAX_DUTY_CYCLE;
 
 	volatile float step = (MAX_PULSE-MIN_PULSE) * (-1.0f/STEPS);
@@ -42,7 +42,7 @@ main(void)
 		if (pulse > MAX_PULSE)
 			pulse = MAX_PULSE;
 
-		delay_ms(100);
+		delay_ms(5000);
 	}
 }
 
